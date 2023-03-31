@@ -4,6 +4,8 @@ fetch("./form.json")
   .then(data => {
     /**main element */
     const mainElement = document.getElementById('mainDiv')
+    const mainForm = document.createElement('form')
+    mainForm.append(mainElement)
     //**loop for each element */
     data.properties.forEach(property => {
       let element, label
@@ -26,7 +28,7 @@ fetch("./form.json")
       } else if (property.item) {
         property.item.forEach(itemProperty => {
           itemProperty.properties.forEach(objProperty => {
-            element = createEl(objProperty)
+            element = createEl(objProperty) 
             mainElement.append(element)
           });
         });
@@ -40,6 +42,7 @@ fetch("./form.json")
     submitButton.setAttribute('type', 'submit');
     submitButton.textContent = 'Submit';
     mainElement.append(submitButton);
+    document.body.append(mainForm)
   })
   .catch(error => console.error(error))
 function createEl(property) {

@@ -71,6 +71,25 @@
               "name": "experience",
               "integer": true,
               "required": true
+            },
+            {
+              "type": "object",
+              "name": "technology",
+              "properties": [
+                {
+                  "type": "string",
+                  "label": "Technology",
+                  "name": "technology",
+                  "required": true
+                },
+                {
+                  "type": "number",
+                  "label": "Experience (years)",
+                  "name": "experience",
+                  "integer": true,
+                  "required": true
+                }
+              ]
             }
           ]
         }
