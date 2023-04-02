@@ -20,18 +20,6 @@ fetch("./form.json")
           optionElement.textContent = option.label;
           element.appendChild(optionElement);
         });
-      } else if (property.properties) {
-        property.properties.forEach(objProperty => {
-          element = createEl(objProperty)
-          mainElement.append(element)
-        });
-      } else if (property.item) {
-        property.item.forEach(itemProperty => {
-          itemProperty.properties.forEach(objProperty => {
-            element = createEl(objProperty) 
-            mainElement.append(element)
-          });
-        });
       } else {
         element = createEl(property)
       }
@@ -45,24 +33,38 @@ fetch("./form.json")
     document.body.append(mainForm)
   })
   .catch(error => console.error(error))
-function createEl(property) {
-  let element
-  property.multiline ? element = document.createElement('textarea') : element = document.createElement('input')
-  property.type === 'boolean' ? element.setAttribute('type', "checkbox") : element.setAttribute('type', property.type)
-  element.setAttribute('name', property.name)
-  element.setAttribute('placeholder', property.label)
-  if (property.required) {
-    element.setAttribute('required', property.required);
+  const createEl = (property) => {
+    let element;
+    if (property.type === "array") {
+      element = document.createElement('div');
+      property.item.forEach(itemProperty => { 
+        element.append(createEl(itemProperty))
+      });
+    }
+    if (property.type === "object") {
+      element = document.createElement('div');
+      property.properties.forEach(objProperty => {
+        element.append(createEl(objProperty))
+      });
+    }
+    if (!element) {
+      element = property.multiline ? document.createElement('textarea') : document.createElement('input');
+      element.setAttribute('type', property.type);
+      element.setAttribute('name', property.name);
+      element.setAttribute('placeholder', property.label);
+      if (property.required) {
+        element.setAttribute('required', property.required);
+      }
+      if (property.inputType) {
+        element.setAttribute('type', property.inputType);
+      }
+      if (property.pattern) {
+        element.setAttribute('pattern', property.pattern);
+      }
+      if (property.minLength && property.maxLength) {
+        element.setAttribute('minLength', property.minLength);
+        element.setAttribute('maxLength', property.maxLength);
+      }
+    }
+    return element;
   }
-  if (property.inputType) {
-    element.setAttribute('type', property.inputType)
-  }
-  if (property.pattern) {
-    element.setAttribute('pattern', property.pattern)
-  }
-  if (property.minLength && property.maxLength) {
-    element.setAttribute('minLength', property.minLength)
-    element.setAttribute('maxLength', property.maxLength)
-  }
-  return element
-}
