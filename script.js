@@ -12,17 +12,7 @@ fetch("./form.json")
       label = document.createElement('label');
       label.textContent = property.label;
       mainElement.append(label)
-      if (property.options) {
-        element = document.createElement('select');
-        property.options.forEach(option => {
-          const optionElement = document.createElement('option');
-          optionElement.setAttribute('value', option.value);
-          optionElement.textContent = option.label;
-          element.appendChild(optionElement);
-        });
-      } else {
         element = createEl(property)
-      }
       mainElement.append(element)
     })
     /**submit button */
@@ -33,12 +23,40 @@ fetch("./form.json")
     document.body.append(mainForm)
   })
   .catch(error => console.error(error))
+
+
   const createEl = (property) => {
     let element;
     if (property.type === "array") {
+      let newArrayEl,removeButton
       element = document.createElement('div');
       property.item.forEach(itemProperty => { 
         element.append(createEl(itemProperty))
+      
+      });
+      const addButton = document.createElement('input')
+      addButton.setAttribute('type','button')
+      addButton.setAttribute('value', 'Add')
+      addButton.addEventListener('click', () => {
+        newArrayEl = createEl(property.item[0])
+        removeButton = document.createElement('input')
+        removeButton.setAttribute('type','button')
+        removeButton.setAttribute('value', 'Remove')
+        removeButton.addEventListener('click', () => {
+          newArrayEl.remove()
+        })
+        newArrayEl.append(removeButton)
+        element.append(newArrayEl)
+      })
+      element.append(addButton) 
+    }
+    if (property.type === "enum") {
+      element = document.createElement('select');
+      property.options.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.setAttribute('value', option.value);
+        optionElement.textContent = option.label;
+        element.append(optionElement);
       });
     }
     if (property.type === "object") {

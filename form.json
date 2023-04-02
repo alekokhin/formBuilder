@@ -204,6 +204,29 @@
       ]
     },
     {
+      "type": "enum",
+      "name": "language",
+      "label": "language",
+      "options": [
+        {
+          "value": "ge",
+          "label": "Georgian"
+        },
+        {
+          "value": "de",
+          "label": "German"
+        },
+        {
+          "value": "en",
+          "label": "English"
+        },
+        {
+          "value": "ru",
+          "label": "Russian"
+        }
+      ]
+    },
+    {
       "type": "boolean",
       "name": "haveComputer",
       "label": "Have a computer and internet"
